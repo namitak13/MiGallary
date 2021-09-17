@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+</head>
+<style>
+    .card img{
+  height: 300px;
+}
+</style>
+<script>
+    function logout(){
+        sessionStorage.setItem("userid" , "");
+        sessionStorage.setItem("name" , "");
+        window.location.href = "homepage.html";
+      }
+
+
+      function navigateLogin(){
+        alert("hello");
+        window.location.href = "Login.html";
+      }
+
+      $(document).ready(function(){
+
+            $(".btn").click(function(){
+
+                var id = this.id;
+
+
+                var temp="<div class='row row-cols-1 row-cols-md-3'>";
+                $.getJSON("http://localhost:3000/pics", function(result){
+                        $.each(result, function(i, field){
+
+                            if(id == field.category)
+
+                            temp += "<div class='col-mb-4 mt-3'>" +  
+                            "<div class='card h-100 mr-3 ml-3'>" + 
+                            "<img class='card-img-top' src='" +field.path+ "' alt='Card image cap'>"+
+                            "<div class='card-body'>" +
+                            "<h5 class='card-title'>" + field.uploader + "</h5>" +
+                            "<p class='card-text'>"+field.hashtag+"</p>"
+                            +"</div>"+ "<div class='card-footer'>"+ 
+                            "<button type='button' class='btn btn-primary mr-1'>Like</button>" +
+                            "<button type='button' class='btn btn-primary mr-1'>comment</button>" + "</div>" + 
+                            "</div>" + "</div>" ;
+                        });
+                    console.log(temp);
+                    document.getElementById("deck").innerHTML=temp;
+                });
+  
+            });
+
+
+        if(sessionStorage.getItem("userid") != "")
+        {
+            document.getElementById("login").style.visibility = "hidden";
+            document.getElementById("register").style.visibility = "hidden";
+            document.getElementById("profile").style.visibility = "visible";
+            var name = sessionStorage.getItem("name");
+            document.getElementById("profile").innerHTML=name;
+            document.getElementById("logout").style.visibility = "visible";
+        }
+
+        else{
+            document.getElementById("login").style.visibility = "visible";
+            document.getElementById("register").style.visibility = "visible";
+            document.getElementById("profile").style.visibility = "hidden";
+            document.getElementById("logout").style.visibility = "hidden";
+        }
+
+        $("#inlineFormInputGroup").on("keyup" , function(){
+            var value = $(this).val().toLowerCase();
+                console.log(value);
+
+                var tempSearch="<div class='row row-cols-1 row-cols-md-3'>";
+                $.getJSON("http://localhost:3000/pics", function(result){
+                        $.each(result, function(i, field){
+                            console.log(field.hashtag.toLowerCase().indexOf(value));
+                            console.log(field.hashtag.toLowerCase().indexOf(value) > -1);
+                            if(field.hashtag.toLowerCase().indexOf(value) > -1)
+
+                            tempSearch += "<div class='col-mb-4 mt-3'>" +  
+                            "<div class='card h-100 mr-3 ml-3'>" + 
+                            "<img class='card-img-top' src='" +field.path+ "' alt='Card image cap'>"+
+                            "<div class='card-body'>" +
+                            "<h5 class='card-title'>" + field.uploader + "</h5>" +
+                            "<p class='card-text'>"+field.hashtag+"</p>"
+                            +"</div>"+ "<div class='card-footer'>"+ 
+                            "<button type='button' class='btn btn-primary mr-1'>Like</button>" +
+                            "<button type='button' class='btn btn-primary mr-1'>comment</button>" + "</div>" + 
+                            "</div>" + "</div>" ;
+                        });
+                    console.log(tempSearch);
+                    document.getElementById("deck").innerHTML=tempSearch;
+                });
+        });
+
+});
+</script>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="homepage.html"><b>Mi Gallery</b></a>
+      
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="homepage.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="category.html">Explore Categories</a>
+            </li>
+          </ul>
+          <button type="button" class="btn" data-toggle="modal" data-target="#exampleModal">
+            Submit a photo
+          </button>
+          <button class="btn mr-3" type="button" id="login" onclick="navigateLogin();">Login</button>
+          <button class="btn btn-success mr-1" type="submit" id="register">Register</button>
+          <button class="btn mr-1" type="submit" id="profile"></button>
+          <button class="btn btn-success mr-1" type="submit" id="logout" onclick="logout();">Logout</button>
+        </div>
+      </nav>
+
+    <div class="container-fluid mt-5" style="text-align: center;">
+        <div class="flex justify-content-center">
+            <button class="btn btn-light btn-lg btn-outline-dark" id="Nature">Nature</button>
+            <button class="btn btn-light btn-lg btn-outline-dark" id="Food">Food</button>
+            <button class="btn btn-light btn-lg btn-outline-dark" id="Tech">Tech</button>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class=" input-group mt-5 col-md-6 ">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class='fa fa-search'></i></div>
+            </div>
+            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search #Hashtag">
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div id="deck">
+
+        </div>
+    </div>
+</body>

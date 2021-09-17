@@ -1,0 +1,169 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "firstname": "keval",
+      "lastname": "keval",
+      "email": "kevalj@cybage.com",
+      "username": "keval1",
+      "password": "kevalj1"
+    },
+    {
+      "firstname": "namita",
+      "lastname": "namita",
+      "email": "namita@cybage.com",
+      "username": "namita13k",
+      "password": "Namita12",
+      "id": 2
+    },
+    {
+      "firstname": "manan",
+      "lastname": "manan",
+      "email": "mananso@cybage.com",
+      "username": "mananso",
+      "password": "Manan123",
+      "id": 3
+    },
+    {
+      "firstname": "batman",
+      "lastname": "batman",
+      "email": "abc@gmail.com",
+      "username": "mananso12",
+      "password": "1Batman1",
+      "id": 4
+    }
+  ],
+  "pics": [
+    {
+      "id": 1,
+      "path": "/assets/images/river.jpg",
+      "uploader": "namita13k",
+      "hashtag": "#nature #mountain #river",
+      "category": "Nature",
+      "uid": "2"
+    },
+    {
+      "path": "/assets/images/boat.jfif",
+      "uploader": "mananso",
+      "hashtag": "#boat #nature",
+      "category": "Nature",
+      "uid": "3",
+      "id": 2
+    },
+    {
+      "path": "/assets/images/deer.jpg",
+      "uploader": "namita13k",
+      "hashtag": "#landscap #wallpaper",
+      "category": "Nature",
+      "uid": "2",
+      "id": 3
+    },
+    {
+      "path": "/assets/images/deer.jpg",
+      "uploader": "namita13k",
+      "hashtag": "#landscap #wallpaper",
+      "category": "Nature",
+      "uid": "2",
+      "id": 4
+    },
+    {
+      "path": "/assets/images/food.jpg",
+      "uploader": "namita13k",
+      "hashtag": "#food",
+      "category": "Food",
+      "uid": "2",
+      "id": 5
+    }
+  ],
+  "likes": [
+    {
+      "imageid": "1",
+      "imageowner": "namita13k",
+      "tag": "#nature #mountain #river",
+      "lname": "mananso",
+      "time": "Thu Sep 16 2021 23:57:36 GMT+0530 (India Standard Time)",
+      "like": "true",
+      "id": 1
+    }
+  ],
+  "comment": [
+    {
+      "id": 1,
+      "cname": "namita13k",
+      "imageid": "1",
+      "comment": "awesome"
+    },
+    {
+      "cname": "mananso",
+      "imageid": "1",
+      "comment": "nice click",
+      "id": 2
+    },
+    {
+      "cname": "mananso",
+      "imageid": "1",
+      "comment": "nice pic",
+      "id": 3
+    },
+    {
+      "cname": "mananso",
+      "imageid": "1",
+      "comment": "hello",
+      "id": 4
+    },
+    {
+      "cname": "mananso",
+      "imageid": "5",
+      "comment": "yummm",
+      "id": 5
+    },
+    {
+      "cname": "mananso",
+      "imageid": "4",
+      "comment": "landscapes are so cool",
+      "id": 6
+    },
+    {
+      "cname": "mananso",
+      "imageid": "1",
+      "comment": "nice",
+      "id": 7
+    },
+    {
+      "cname": "mananso",
+      "imageid": "1",
+      "comment": "hii",
+      "id": 8
+    },
+    {
+      "cname": "mananso",
+      "imageid": "1",
+      "comment": "yo",
+      "id": 9
+    },
+    {
+      "cname": "mananso",
+      "imageid": "2",
+      "comment": "wow",
+      "id": 10
+    },
+    {
+      "cname": "mananso",
+      "imageid": "3",
+      "comment": "hiii",
+      "id": 11
+    },
+    {
+      "cname": "mananso",
+      "imageid": "5",
+      "comment": "hiii",
+      "id": 12
+    },
+    {
+      "cname": "mananso",
+      "imageid": "5",
+      "comment": "testy !!",
+      "id": 13
+    }
+  ]
+}

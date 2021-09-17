@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+<style>
+  .im{
+    padding-top: 10px;
+    width: 100%;
+    height:10%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.container-fluid{
+position: relative;
+top: 10%;
+}
+@media screen and (max-width:680px){
+  .im{
+    padding-top: 10px;
+    width: 100%;
+    height:10%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+} 
+}
+</style>
+<script>
+  $(document).ready(function(){
+
+    $( "#target" ).click(function() {
+
+      alert("hello");
+      var fname = $("#fname").val();
+      var lname = $("#lname").val();
+      var email = $("#email").val();
+      var username = $("#uname").val();
+      var password = $("#pwd").val();
+
+      
+      $.getJSON("http://localhost:3000/users", function(result){
+        var duplicate = 0;
+            $.each(result, function(i, field){
+                if(field.username == username)
+                {
+                    duplicate = 1;
+                    alert("username already exist");
+                }
+            });
+      });
+
+    
+        $.ajax({
+          type : "POST" ,
+          url : "http://localhost:3000/users" ,
+          data : {
+              "firstname" : fname ,
+              "lastname" : lname ,
+              "email" : email ,
+              "username" : username ,
+              "password" : password
+          } ,
+
+          success : function(result){
+            console.log(result);
+            alert(JSON.stringify(result));
+            window.location.href="Login.html";
+          }
+        });
+      
+  });
+});
+
+
+
+
+
+
+</script>
+<body>
+    <div class="im">
+        <div>
+            <img src="/assets/images/image1.png"  width="85%" height="850px">
+            <!-- <div class="centered">
+            <h1 class="heading"></h1>
+            <div class="para">
+            <h5></h5>
+            </div>   
+            </div> -->
+        </div>
+
+        <div>
+            <div class="container-fluid">
+                <div>
+                    <h3 style="text-align: center;">Join MiGallary</h3>
+                    <p style="text-align: center;">Already have an account? <a href="Login.html">Login</a></p>
+                    <hr>
+                    <form class="was-validated">
+                        <div class="form-row justify-content-center align-items-center h-100">
+                          <div class="form-group col-md-6">
+                            <label for="fname">Firstname</label>
+                            <input type="text" class="form-control is-valid" id="fname" placeholder="Enter Firstname" required>
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback"></div>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="lname">Lastname</label>
+                            <input type="text" class="form-control is-valid" id="lname"  placeholder="Enter Lastname" required>
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback"></div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" class="form-control is-valid" id="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$" placeholder="john@gmail.com" required>
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback"></div>
+                          </div>
+                          <div class="form-group">
+                            <label for="uname">Username</label><span style="color: gray;"> (only letters, numbers, and underscores)</span>
+                            <input type="text" class="form-control is-valid" id="uname" placeholder="Enter Username" required>
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback"></div>
+                            <div id="duplicate"></div>
+                          </div>
+                          <div class="form-group">
+                            <label for="pwd">Password</label><span style="color: gray;"> (min 8 character, lowercase, uppercase, numbers)</span>
+                            <input type="password" class="form-control is-valid" id="pwd" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" maxlength="8" placeholder="Enter Password" required>
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback"></div>
+                          </div>
+                          <div class="form-group">
+                            <button type="button" id="target" class="btn btn-dark btn-lg btn-block">Join</button>
+                          </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+</html>
