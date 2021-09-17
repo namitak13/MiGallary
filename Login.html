@@ -6,57 +6,95 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <title>Login</title>
     </head>
-    <style>
-        
-    </style>
+    <script>
+      $(document).ready(function(){
+
+        $("#file").click(function(){
+          var browse = document.getElementById("fileinput").value;
+          alert(browse);
+          console.log(browse);
+          console.log(typeof(browse));
+          var browseSplit = browse.split("fakepath");
+          console.log(browseSplit);
+          alert(browseSplit);
+          var name = browseSplit[browseSplit.length - 1]; 
+          console.log(name);
+            alert(name);
+          var nameFinal = name.substring(1);
+          alert(nameFinal);
+          console.log(nameFinal);
+        });
+
+          $( "#login" ).click(function() {
+
+            var username = $("#user").val();
+            console.log(username);
+            var password = $("#pass").val();
+            alert(username + password);
+
+
+        $.getJSON("http://localhost:3000/users", function(result){
+            var check=0;
+            $.each(result, function(i, field){
+                if(field.username == username && field.password == password)
+                {
+                    alert("Logged in successfully");
+                    sessionStorage.setItem("userid" , field.id);
+                    sessionStorage.setItem("name" , field.username);
+                    check = 1;
+                    alert(sessionStorage.getItem("userid"));
+                }
+            });
+
+            if(check == 0)
+            {
+                alert("Registration required");
+            }  
+        });
+});
+
+});
+    </script>
     <body>
-        <div style=" background-image:url(Header.jpg);  height: 100px; ">
-            <div style=" text-align: center; margin: 1%; padding: 10px;">
-            <h2 style="font-family: cursive; color: white;"><i>"Photography is more than a medium for factual communication of ideas. It is a creative art."</i></h2>
-        </div>
-    </div>
-        
-        <hr>
         <div class="text-center">
-            <a href="/_" title="MI_Home" >
-                <img src="home.jfif" style="width: 100px; height: 100px;">
+            <a href="/homepage.html" title="MI_Home" >
+                <img src="/assets/images/home.jfif" style="width: 70px; height: 70px;">
             </a>
             <br><br>
-             <h3 style="text-align: center;">LOGIN Here</h3>
+             <h3 style="text-align: center;">LOGIN</h3>
          </div>
             <div>
           <div class="form-row justify-content-center align-items-center h-100">
           
             <form >
             <div class="form-group">
-                <label for="validationDefaultUsername">Username</label>
+                <label for="user">Username</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="">@</span>
                   </div>
-                  <input type="text" class="form-control" id="validationDefaultUsername" placeholder="Username"  required>
+                  <input type="text" class="form-control" id="user" placeholder="Username"  required>
                 </div>
                 <small id="userHelp" class="form-text text-muted">Your username is unique.</small>
             </div>
             
             <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" id="" placeholder="Password">
-              <small id="passHelp" class="form-text text-muted">Password must be 8 digit and contain a special character(!,@,#,$,etc.)</small>
+              <label for="pass">Password</label>
+              <input type="password" class="form-control" id="pass" placeholder="Password">
+              <small id="passHelp" class="form-text text-muted">min 8 character, lowercase, uppercase, numbers</small>
             </div>
             <br>
             <div class="row justify-content-center align-items-center h-100">
                 
-                    <button type="button" class="btn btn-dark btn-lg">Login</button>
+                    <button type="button" id="login" class="btn btn-dark btn-lg">Login</button>
             </div>
             <br>
             <p style="text-align: center;"><u>Dont have an account? <a href="#">Join!</a></u></p>
           </form>
         </div>  
         </div>
-        
-        
     </body>
 </html>

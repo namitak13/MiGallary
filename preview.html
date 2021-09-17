@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+</head>
+<style>
+    .card img{
+        height: 450px;
+    }
+</style>
+<script>
+   var response;
+   var date =  new Date();
+    function navigateCat(){
+        window.location.href="category.html";
+      }
+
+      function logout(){
+        sessionStorage.setItem("userid" , "");
+        sessionStorage.setItem("name" , "");
+        window.location.href = "homepage.html";
+      }
+
+
+      function navigateLogin(){
+        window.location.href = "Login.html";
+      }
+
+      function navigateRegister(){
+        window.location.href = "signup.html";
+      }
+      
+
+$(document).ready(function(){
+
+    
+    if(sessionStorage.getItem("userid") != "")
+      {
+        document.getElementById("login").style.visibility = "hidden";
+        document.getElementById("register").style.visibility = "hidden";
+        document.getElementById("profile").style.visibility = "visible";
+        var name = sessionStorage.getItem("name");
+        document.getElementById("profile").innerHTML=name;
+        document.getElementById("logout").style.visibility = "visible";
+      }
+
+      else{
+        document.getElementById("login").style.visibility = "visible";
+        document.getElementById("register").style.visibility = "visible";
+        document.getElementById("profile").style.visibility = "hidden";
+        document.getElementById("logout").style.visibility = "hidden";
+      }
+
+
+    let urlParams = new URLSearchParams(window.location.search);
+    const param = urlParams.get("id");
+    const uploader = urlParams.get("name");
+    var tag = "";
+    console.log(param);
+    console.log(uploader);
+    const username = sessionStorage.getItem("name");
+    console.log(username);
+
+    let temp = "";
+    $.getJSON("http://localhost:3000/pics", function(result){
+                        $.each(result, function(i, field){
+                            if(param == field.id)
+                            {
+                                 tag = field.hashtag;
+                                console.log(tag);
+                                temp += "<img class='img-card-top' src='"+ field.path + "' alt='alternative'>"+
+                                "<div class='card-body'>" +
+                            "<h5 class='card-title'>" + field.uploader + "</h5>" +
+                            "<p class='card-text'>"+field.hashtag+"</p>"
+                            +"</div>";
+                            }
+                        });
+                    console.log(temp);
+                    document.getElementById("deck").innerHTML=temp;
+                });
+
+    let temp2 = "";
+    $.getJSON("http://localhost:3000/comment", function(result){
+                        $.each(result, function(i, field){
+                            if(param == field.imageid)
+                            {
+                                temp2 +=  field.cname +  "   :   " +
+                                          field.comment +  "<br>";
+                            }
+                        });
+                    console.log(temp2);
+                    document.getElementById("deckarea").innerHTML=temp2;
+                });
+
+                $.getJSON("http://localhost:3000/likes", function(result){
+                        $.each(result, function(i, field){
+                            if(param == field.imageid && sessionStorage.getItem("name") == field.lname)
+                            {
+                                
+                                if(field.like == "true")
+                                {
+                                    console.log(sessionStorage.getItem("name"));
+                                    document.getElementById("likeButton").innerHTML = "<i class='far fa-thumbs-up'></i>";
+                                    $("#likeButton").css("background-color", "skyblue");
+                                }
+
+                                else
+                                {
+                                    document.getElementById("likeButton").innerHTML = "<i class='far fa-thumbs-up'></i>";
+                                }
+                            }
+                            else{
+                                document.getElementById("likeButton").innerHTML = "<i class='far fa-thumbs-up'></i>";
+                            }
+                        });
+                });
+
+    $("#likeButton").click(function(){
+            
+        $.getJSON("http://localhost:3000/likes", function(result){
+
+           response = result.filter(function(obj){
+               return obj.imageid == param && obj.lname == username;
+           });
+
+           console.log(response);
+            
+           if(response.length > 0)
+           {
+               
+                $.each(response, function(i, field){
+                    var lid =field.id;
+                    if(field.like == "true")
+                    {
+                        console.log(lid);
+                        $.ajax({
+                            type : "PUT" ,
+                            url : "http://localhost:3000/likes/"+lid ,
+                            data : 
+                            {
+                                "imageid" : param ,
+                                "imageowner" : uploader ,
+                                "tag" : tag ,
+                                "lname" : sessionStorage.getItem("name"),
+                                "time" : new Date(),
+                                "like" : "false"
+                            } ,
+                               
+                            success : function(result){
+                            console.log(result);
+                            alert(JSON.stringify(result));
+                            }
+                        });
+                    }
+
+                    else
+                    {
+
+                        $.ajax({
+                            type : "PUT" ,
+                            url : "http://localhost:3000/likes/"+lid ,
+                            data : 
+                            {
+                                "imageid" : param ,
+                                "imageowner" : uploader ,
+                                "tag" : tag,
+                                "lname" : sessionStorage.getItem("name"),
+                                "time" : new Date(),
+                                "like" : "true"
+                            } ,
+
+                            success : function(result){
+                                console.log(result);
+                                alert(JSON.stringify(result));
+                            }
+                        });
+                    }
+
+
+                });
+                 
+            }
+            else
+            {
+                $.ajax({
+                    type : "POST" ,
+                    url : "http://localhost:3000/likes/" ,
+                    data : {
+                        "imageid" : param ,
+                        "imageowner" : uploader ,
+                        "tag" : tag ,
+                        "lname" : sessionStorage.getItem("name"),
+                        "time" : new Date(),
+                        "like" : "true"
+                    } ,
+
+                    success : function(result){
+                        console.log(result);
+                        alert(JSON.stringify(result));
+                    }
+                });
+            }
+
+
+         });
+    });
+
+    $("#upload").click(function(){
+       
+        alert("hello");
+        var comment = $("#comment").val();
+        var uploader = sessionStorage.getItem("name");
+        var uid = sessionStorage.getItem("userid");
+
+        $.ajax({
+          type : "POST" ,
+          url : "http://localhost:3000/comment" ,
+          data : {
+              "cname" : uploader ,
+              "imageid" : param ,
+              "comment" : comment 
+          } ,
+
+          success : function(result){
+            console.log(result);
+            alert(JSON.stringify(result));
+          }
+        });
+
+
+      });
+
+      $("#download").click(function(){
+        let temp3 = "";
+        $.getJSON("http://localhost:3000/pics", function(result){
+                        $.each(result, function(i, field){
+                            if(param == field.id)
+                            {
+                                temp3 += field.path;
+                            }
+                        });
+                    console.log(temp3);
+                    var a = document.createElement('a');
+                    a.href = temp3;
+                    let array = temp3.split("/");
+                    console.log(array);
+                    let name = array[array.length - 1];
+                    console.log(name);
+                    a.download = name;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+        });
+    });
+});
+
+</script>
+<style>
+    #deckarea{
+        font-size: 30px;
+    }
+
+    .card img{
+        height: 400px;
+    }
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="homepage.html"><b>Mi Gallery</b></a>
+      
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="homepage.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="category.html">Explore Categories</a>
+            </li>
+          </ul>
+          <button type="button" class="btn" data-toggle="modal" data-target="#exampleModal">
+            Submit a photo
+          </button>
+          <button class="btn mr-3" type="button" id="login" onclick="navigateLogin();">Login</button>
+          <button class="btn btn-success mr-1" type="submit" id="register" onclick="navigateRegister();">Register</button>
+          <button class="btn mr-1" type="submit" id="profile"></button>
+          <button class="btn btn-success mr-1" type="submit" id="logout" onclick="logout();">Logout</button>
+        </div>
+      </nav>
+    <div class="container-fluid">
+        <div class="card col-md-10 mx-auto" id="deck">
+        </div>
+        <div class="container-fluid" style="text-align: center;">
+            <div class="flex justify-content-center">
+                <button class="btn btn-light btn-lg btn-outline-dark" id="likeButton" type="button">
+                </button>
+                <button class="btn btn-light btn-lg btn-outline-dark" type="button" data-toggle="collapse" 
+                data-target=".commentCollapse" aria-expanded="false" 
+                aria-controls="deckarea textboxComment" ><i class="far fa-comments"></i></button>
+                <button class="btn btn-light btn-lg btn-outline-dark" id="download"><i class="fas fa-download"></i></button>
+            </div>
+        </div>
+        <div class="card col-md-10 mx-auto commentCollapse" id="deckarea">
+            
+        </div>
+        <div class="form-group col-md-10 mx-auto commentCollapse" id="textboxComment">
+            <input type="text" class="form-control form-control-lg" placeholder="comment" id="comment">
+            <div class="row justify-content-center align-items-center h-100"></div>
+                <button type="button" id="upload" class="btn btn-dark btn-lg">Upload</button>
+              </div>
+        </div> 
+    </div>
+</body>
+</html>
