@@ -1,0 +1,4 @@
+<h3>Movies to Watch</h3>
+<ol *ngFor='let m of movies; let i=index' [attr.data-index]= 'i' >
+    {{i+1}}. {{m}}
+</ol>
